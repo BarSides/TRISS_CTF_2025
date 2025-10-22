@@ -1,0 +1,458 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ids_configuration>
+  <system_info>
+    <hostname>main-ids-sensor-01</hostname>
+    <management_ip>192.168.10.5</management_ip>
+    <deployment_zone>DMZ-Perimeter</deployment_zone>
+    <admin_contact>security_admin@example.com</admin_contact>
+    <last_config_modified>2025-07-17T14:30:00Z</last_config_modified>
+  </system_info>
+
+  <network_interfaces>
+    <interface name="eth0">
+      <role>management</role>
+      <ip_address>192.168.10.5/24</ip_address>
+      <gateway>192.168.10.1</gateway>
+    </interface>
+    <interface name="eth1">
+      <role>monitoring</role>
+      <mode>promiscuous</mode>
+      <monitored_networks>
+        <network>10.0.0.0/8</network>
+        <network>172.16.0.0/16</network>
+        <network>192.168.1.0/24</network>
+      </monitored_networks>
+    </interface>
+  </network_interfaces>
+
+  <signature_engine>
+    <engine_type>Snort</engine_type>
+    <version>3.0.0</version>
+    <rule_sets>
+      <ruleset name="community-rules">
+        <enabled>true</enabled>
+        <update_frequency>daily</update_frequency>
+        <source>https://rules.snort.org/snort3_community.tgz</source>
+      </ruleset>
+      <ruleset name="ET-open-rules">
+        <enabled>true</enabled>
+        <update_frequency>daily</update_frequency>
+        <source>https://rules.emergingthreats.net/open/snort-2.9.0/emerging.rules.tar.gz</source>
+      </ruleset>
+      <ruleset name="custom-internal-rules">
+        <enabled>true</enabled>
+        <file_path>/etc/snort/rules/local.rules</file_path>
+        <description>Rules for internal applications and sensitive data.</description>
+      </ruleset>
+    </rule_sets>
+    <preprocessors>
+      <preprocessor name="http_inspect">
+        <enabled>true</enabled>
+        <config>
+          <normalize_http>true</normalize_http>
+          <decompress_gzip>true</decompress_gzip>
+        </config>
+      </preprocessor>
+      <preprocessor name="stream5_reassembly">
+        <enabled>true</enabled>
+        <config>
+          <max_sessions>100000</max_sessions>
+          <timeout_seconds>300</timeout_seconds>
+        </config>
+      </preprocessor>
+    </preprocessors>
+  </signature_engine>
+
+  <alerting_mechanisms>
+    <email_alerts>
+      <enabled>true</enabled>
+      <recipient>soc@example.com</recipient>
+      <severity_threshold>high</severity_threshold>
+      <smtp_server>smtp.example.com</smtp_server>
+      <sender_email>ids@example.com</sender_email>
+    </email_alerts>
+    <syslog_alerts>
+      <enabled>true</enabled>
+      <syslog_server>192.168.10.10</syslog_server>
+      <port>514</port>
+      <protocol>UDP</protocol>
+      <facility>local0</facility>
+      <level>info</level>
+    </syslog_alerts>
+    <snmp_traps>
+      <enabled>false</enabled>
+      <trap_server></trap_server>
+      <community_string></community_string>
+    </snmp_traps>
+  </alerting_mechanisms>
+
+  <logging_options>
+    <full_packet_capture>
+      <enabled>false</enabled>
+      <retention_days>7</retention_days>
+      <storage_path>/var/log/ids/pcap</storage_path>
+      <max_disk_usage>80%</max_disk_usage>
+    </full_packet_capture>
+    <fast_log>
+      <enabled>true</enabled>
+      <log_path>/var/log/ids/fast.log</log_path>
+    </fast_log>
+    <unified2_log>
+      <enabled>true</enabled>
+      <log_path>/var/log/ids/unified2.log</log_path>
+      <max_file_size_mb>128</max_file_size_mb>
+    </unified2_log>
+  </logging_options>
+
+  <policy_enforcement>
+    <blocking>
+      <enabled>false</enabled>
+      <mode>active</mode>
+      <duration_minutes>5</duration_minutes>
+      <block_threshold>critical</block_threshold>
+    </blocking>
+    <quarantine>
+      <enabled>false</enabled>
+      <quarantine_network>10.0.254.0/24</quarantine_network>
+    </quarantine>
+  </policy_enforcement>
+
+  <performance_settings>
+    <cpu_affinity>
+      <enabled>true</enabled>
+      <cores>2,3</cores>
+    </cpu_affinity>
+    <memory_limit_mb>4096</memory_limit_mb>
+    <packet_buffer_size_mb>512</packet_buffer_size_mb>
+  </performance_settings>
+
+  <integration_settings>
+    <siem_integration>
+      <enabled>true</enabled>
+      <siem_type>Splunk</siem_type>
+      <api_endpoint>https://splunk.example.com:8088/services/collector</api_endpoint>
+      <auth_token>TOKEN_PLACEHOLDER_DO_NOT_LEAK</auth_token>
+    </siem_integration>
+    <threat_intel_feed>
+      <enabled>true</enabled>
+      <feed_provider>ThreatConnect</feed_provider>
+      <api_key>API_KEY_PLACEHOLDER_DO_NOT_LEAK</api_key>
+      <update_interval_hours>6</update_interval_hours>
+    </threat_intel_feed>
+  </integration_settings>
+
+  <custom_rules_definitions>
+    <rule id="CUSTOM-001">
+      <description>Detects suspicious activity related to internal HR portal access from external networks.</description>
+      <sid>1000001</sid>
+      <action>alert</action>
+      <protocol>tcp</protocol>
+      <source_ip>any</source_ip>
+      <source_port>any</source_port>
+      <destination_ip>192.168.1.100</destination_ip>
+      <destination_port>443</destination_port>
+      <content>"/hr_portal/login.php"</content>
+      <msg>"HR Portal external access attempt"</msg>
+    </rule>
+    <rule id="CUSTOM-002">
+      <description>Alert on large data transfer outbound from database server.</description>
+      <sid>1000002</sid>
+      <action>alert</action>
+      <protocol>tcp</protocol>
+      <source_ip>192.168.1.70</source_ip>
+      <source_port>any</source_port>
+      <destination_ip>any</destination_ip>
+      <destination_port>any</destination_port>
+      <byte_count>10485760</byte_count> <msg>"Large outbound transfer from DB server"</msg>
+    </rule>
+    <rule id="CUSTOM-003">
+      <description>Detects reconnaissance scan for common vulnerable ports.</description>
+      <sid>1000003</sid>
+      <action>alert</action>
+      <protocol>tcp</protocol>
+      <source_ip>external</source_ip>
+      <source_port>any</source_port>
+      <destination_ip>any</destination_ip>
+      <destination_port>21,22,23,80,443,445,3389</destination_port>
+      <flow>established,to_server</flow>
+      <rate_limit>
+        <count>5</count>
+        <seconds>10</seconds>
+        <track>by_src</track>
+      </rate_limit>
+      <msg>"Port scan detected on common vulnerable ports"</msg>
+    </rule>
+    <rule id="CUSTOM-004">
+      <description>Flag for unusual admin activity outside of business hours.</description>
+      <sid>1000004</sid>
+      <action>alert</action>
+      <protocol>tcp</protocol>
+      <source_ip>192.168.10.0/24</source_ip>
+      <source_port>any</source_port>
+      <destination_ip>192.168.1.10</destination_ip>
+      <destination_port>22</destination_port>
+      <time_restriction>
+        <start_hour>22</start_hour>
+        <end_hour>6</end_hour>
+      </time_restriction>
+      <msg>"Off-hours admin SSH login"</msg>
+    </rule>
+    <rule id="CUSTOM-005">
+      <description>Detects potential DNS exfiltration attempts.</description>
+      <sid>1000005</sid>
+      <action>alert</action>
+      <protocol>udp</protocol>
+      <source_ip>10.0.0.0/8</source_ip>
+      <source_port>any</source_port>
+      <destination_ip>any</destination_ip>
+      <destination_port>53</destination_port>
+      <dns_query_length>gt:100</dns_query_length>
+      <msg>"Excessive DNS query length - possible exfil"</msg>
+    </rule>
+    <rule id="CUSTOM-006">
+      <description>Unusual HTTP POST request size - potential command and control.</description>
+      <sid>1000006</sid>
+      <action>alert</action>
+      <protocol>tcp</protocol>
+      <source_ip>any</source_ip>
+      <source_port>any</source_port>
+      <destination_ip>192.168.1.50</destination_ip>
+      <destination_port>80</destination_port>
+      <http_method>POST</http_method>
+      <http_body_length>gt:2048</http_body_length>
+      <msg>"Large HTTP POST - potential C2"</msg>
+    </rule>
+    <rule id="CUSTOM-007">
+      <description>Detects multiple failed authentication attempts to critical services.</description>
+      <sid>1000007</sid>
+      <action>alert</action>
+      <protocol>tcp</protocol>
+      <source_ip>any</source_ip>
+      <source_port>any</source_port>
+      <destination_ip>192.168.1.10, 192.168.1.70, 192.168.1.150</destination_ip>
+      <destination_port>22,3389</destination_port>
+      <flowbits>set,failed_auth_attempt</flowbits>
+      <threshold type="count" track="by_src" count="5" seconds="60" />
+      <msg>"Multiple failed authentication attempts"</msg>
+    </rule>
+    <rule id="CUSTOM-008">
+      <description>Detects unusual user-agent strings that might indicate automated tools.</description>
+      <sid>1000008</sid>
+      <action>alert</action>
+      <protocol>tcp</protocol>
+      <source_ip>any</source_ip>
+      <source_port>any</source_port>
+      <destination_ip>192.168.1.50</destination_ip>
+      <destination_port>80,443</destination_port>
+      <http_user_agent>"python-requests", "curl", "Go-http-client"</http_user_agent>
+      <msg>"Suspicious user agent detected"</msg>
+    </rule>
+    <rule id="CUSTOM-009">
+      <description>Flag for direct IP access to sensitive internal servers instead of FQDN.</description>
+      <sid>1000009</sid>
+      <action>alert</action>
+      <protocol>tcp</protocol>
+      <source_ip>any</source_ip>
+      <source_port>any</source_port>
+      <destination_ip>192.168.1.10, 192.168.1.70</destination_ip>
+      <destination_port>any</destination_port>
+      <http_host_header>not_present</http_host_header>
+      <msg>"Direct IP access to sensitive server"</msg>
+    </rule>
+    <rule id="CUSTOM-010">
+      <description>Detects attempts to bypass proxy settings from internal hosts.</description>
+      <sid>1000010</sid>
+      <action>alert</action>
+      <protocol>tcp</protocol>
+      <source_ip>192.168.1.0/24</source_ip>
+      <source_port>any</source_port>
+      <destination_ip>any</destination_ip>
+      <destination_port>80,443</destination_port>
+      <http_connect_method>true</http_connect_method>
+      <msg>"Proxy bypass attempt detected"</msg>
+    </rule>
+    <rule id="CUSTOM-011">
+      <description>Alert on executable files transferred over unencrypted channels.</description>
+      <sid>1000011</sid>
+      <action>alert</action>
+      <protocol>tcp</protocol>
+      <source_ip>any</source_ip>
+      <source_port>any</source_port>
+      <destination_ip>any</destination_ip>
+      <destination_port>21,80</destination_port>
+      <file_extension>".exe", ".bat", ".dll"</file_extension>
+      <msg>"Executable transferred over unencrypted channel"</msg>
+    </rule>
+    <rule id="CUSTOM-012">
+      <description>Detects common web shell filenames being accessed.</description>
+      <sid>1000012</sid>
+      <action>alert</action>
+      <protocol>tcp</protocol>
+      <source_ip>any</source_ip>
+      <source_port>any</source_port>
+      <destination_ip>192.168.1.50</destination_ip>
+      <destination_port>80,443</destination_port>
+      <http_uri>
+        <pattern>"/shell.php"</pattern>
+        <pattern>"/cmd.jsp"</pattern>
+        <pattern>"/backdoor.asp"</pattern>
+      </http_uri>
+      <msg>"Web shell access attempt"</msg>
+    </rule>
+    <rule id="CUSTOM-013">
+      <description>Alert for unauthorized use of `ncat` or `netcat` executables.</description>
+      <sid>1000013</sid>
+      <action>alert</action>
+      <protocol>tcp</protocol>
+      <source_ip>192.168.1.0/24</source_ip>
+      <source_port>any</source_port>
+      <destination_ip>any</destination_ip>
+      <destination_port>any</destination_port>
+      <file_transfer_content>"ncat.exe", "nc.exe"</file_transfer_content>
+      <msg>"Ncat/Netcat execution detected"</msg>
+    </rule>
+    <rule id="CUSTOM-014">
+      <description>Detects data transfer to suspicious external cloud storage providers.</description>
+      <sid>1000014</sid>
+      <action>alert</action>
+      <protocol>tcp</protocol>
+      <source_ip>192.168.1.0/24</source_ip>
+      <source_port>any</source_port>
+      <destination_ip>external</destination_ip>
+      <destination_port>443</destination_port>
+      <http_host>
+        <pattern>"*.mega.nz"</pattern>
+        <pattern>"*.anonfiles.com"</pattern>
+      </http_host>
+      <msg>"Data transfer to suspicious cloud storage"</msg>
+    </rule>
+    <rule id="CUSTOM-015">
+      <description>Flag for suspicious registry modifications over SMB.</description>
+      <sid>1000015</sid>
+      <action>alert</action>
+      <protocol>tcp</protocol>
+      <source_ip>any</source_ip>
+      <source_port>any</source_port>
+      <destination_ip>192.168.1.150</destination_ip>
+      <destination_port>445</destination_port>
+      <smb_command>RegSetValue</smb_command>
+      <registry_path>
+        <pattern>"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Run"</pattern>
+        <pattern>"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run"</pattern>
+      </registry_path>
+      <msg>"Suspicious registry modification via SMB"</msg>
+    </rule>
+    <rule id="CUSTOM-016">
+      <description>Detects attempts to download known exploit tools.</description>
+      <sid>1000016</sid>
+      <action>alert</action>
+      <protocol>tcp</protocol>
+      <source_ip>any</source_ip>
+      <source_port>any</source_port>
+      <destination_ip>192.168.1.100</destination_ip>
+      <destination_port>80,443</destination_port>
+      <http_uri>
+        <pattern>"*/mimikatz.exe"</pattern>
+        <pattern>"*/lazagne.zip"</pattern>
+        <pattern>"*/Responder.py"</pattern>
+      </http_uri>
+      <msg>"Download of known exploit tool"</msg>
+    </rule>
+    <rule id="CUSTOM-017">
+      <description>Alert on unexpected RDP connections from non-admin workstations.</description>
+      <sid>1000017</sid>
+      <action>alert</action>
+      <protocol>tcp</protocol>
+      <source_ip>192.168.1.200</source_ip> <source_port>any</source_port>
+      <destination_ip>192.168.1.150</destination_ip>
+      <destination_port>3389</destination_port>
+      <msg>"Unexpected RDP connection from non-admin workstation"</msg>
+    </rule>
+    <rule id="CUSTOM-018">
+      <description>Detects communication to known TOR exit nodes.</description>
+      <sid>1000018</sid>
+      <action>alert</action>
+      <protocol>tcp</protocol>
+      <source_ip>192.168.1.0/24</source_ip>
+      <source_port>any</source_port>
+      <destination_ip>209.124.71.164</destination_ip> <destination_port>any</destination_port>
+      <msg>"Communication to TOR exit node"</msg>
+    </rule>
+    <rule id="CUSTOM-019">
+      <description>Detection for DNS requests for newly registered domains (NRDs).</description>
+      <sid>1000019</sid>
+      <action>alert</action>
+      <protocol>udp</protocol>
+      <source_ip>any</source_ip>
+      <source_port>any</source_port>
+      <destination_ip>any</destination_ip>
+      <destination_port>53</destination_port>
+      <dns_response_code>NXDOMAIN</dns_response_code>
+      <rate_limit>
+        <count>10</count>
+        <seconds>60</seconds>
+        <track>by_src</track>
+      </rate_limit>
+      <msg>"Frequent NXDOMAIN responses - possible DGA/NRD"</msg>
+    </rule>
+    <rule id="CUSTOM-020">
+      <description>Alerts on a specific, highly suspicious string in web traffic, implying a hidden backdoor or data leak. This is where the flag is.</description>
+      <sid>1000020</sid>
+      <action>alert</action>
+      <protocol>tcp</protocol>
+      <source_ip>any</source_ip>
+      <source_port>any</source_port>
+      <destination_ip>192.168.1.50</destination_ip>
+      <destination_port>80,443</destination_port>
+      <http_uri>
+        <pattern>"/config_backup/sensitive_data.zip"</pattern>
+      </http_uri>
+      <http_cookie>
+        <pattern>
+          <encoded_flag>QmFyU2lkZXN7ZDBuJzdfcjAxMV95MHVyXzB3bl9jcnlwNzB9</encoded_flag>
+        </pattern>
+      </http_cookie>
+      <msg>"Highly suspicious traffic with hidden configuration data - FLAG HERE"</msg>
+    </rule>
+  </custom_rules_definitions>
+
+  <advanced_threat_detection>
+    <anomaly_detection>
+      <enabled>true</enabled>
+      <baseline_period_days>30</baseline_period_days>
+      <alert_threshold>3</alert_threshold> <monitored_metrics>
+        <metric>bandwidth_deviation</metric>
+        <metric>failed_login_rate</metric>
+        <metric>port_scan_frequency</metric>
+      </monitored_metrics>
+    </anomaly_detection>
+    <honeypot_sensors>
+      <sensor name="WebHoneypot-01">
+        <enabled>true</enabled>
+        <ip_address>192.168.1.250</ip_address>
+        <port>80</port>
+        <service>HTTP</service>
+        <alert_on_access>true</alert_on_access>
+      </sensor>
+      <sensor name="DBHoneypot-01">
+        <enabled>false</enabled>
+        <ip_address>192.168.1.251</ip_address>
+        <port>5432</port>
+        <service>PostgreSQL</service>
+      </sensor>
+    </honeypot_sensors>
+  </advanced_threat_detection>
+
+  <maintenance_schedule>
+    <daily_restart>
+      <enabled>false</enabled>
+      <time>03:00</time>
+    </daily_restart>
+    <weekly_integrity_check>
+      <enabled>true</enabled>
+      <day_of_week>Sunday</day_of_week>
+      <time>02:00</time>
+    </weekly_integrity_check>
+  </maintenance_schedule>
+
+</ids_configuration>
