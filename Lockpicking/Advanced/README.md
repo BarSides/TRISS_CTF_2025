@@ -8,12 +8,12 @@ Orange Box
 
 ## Overview
 
-This lockpicking challenge is to open the hard Abus lock on the orange box.
+This lockpicking challenge is to open the heavy duty Master lock on the orange box.
 
 ## Setup
 
-Ensure the orange box is closed and latched, then attach the Abus lock and ensure it latches successfully.
+Ensure the orange box is closed and latched, then attach the Heavy Duty Master lock and ensure it latches successfully.
 
 ## Flag
 
-BarSides{S3cur!ty_P!n$_0h_my}
+BarSides{B33fy_L0cks}
