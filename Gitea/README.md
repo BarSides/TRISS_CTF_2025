@@ -10,6 +10,12 @@ chain emphasizes operational hygiene failures rather than exotic exploits,
 teaching participants how small misconfigurations and leaked secrets can be
 chained into a significant intrusion.
 
+> [!IMPORTANT]
+> The `gitea-ctf/gitea/config/app.ini` contains a hardcoded configuration of
+> `DOMAIN = gitea.triss.ctf`. This must be updated to reflect the hostname which
+> will be used during the competition, or to a hardcoded IP that will be used
+> to access the service
+
 ## Attack/Escalation Path
 
 1. [X] Initial access through hardcoded password in action
