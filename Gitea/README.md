@@ -1,5 +1,15 @@
 # CTF Challenges
 
+## Overview
+
+A seemingly innocent fork of an intern project turns into a pipeline-driven
+compromise. An exposed workflow contains secrets, those credentials unlock an
+account, and a sequence of repository artifacts and user-scoped configuration
+values provide the pivot points into progressively more sensitive context. The
+chain emphasizes operational hygiene failures rather than exotic exploits,
+teaching participants how small misconfigurations and leaked secrets can be
+chained into a significant intrusion.
+
 ## Attack/Escalation Path
 
 1. [X] Initial access through hardcoded password in action
