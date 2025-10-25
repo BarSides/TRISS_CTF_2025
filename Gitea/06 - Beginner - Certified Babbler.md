@@ -8,7 +8,7 @@ Certified Babbler
 
 ## Difficulty
 
-Easy
+Beginner
 
 ## Overview
 
@@ -43,5 +43,5 @@ file contains a literal token formatted like an in-challenge marker:
 block rather than presented as a separate line, so solving requires scanning or
 grepping for irregular ASCII within otherwise encoded data.
 
-This challenge is deemed as "Easy" due to no need of decoding the surrounding
-block so they can find it with a simple search for the word "flag".
+This challenge is deemed as "Beginner" due to no need of decoding the
+surrounding block so they can find it with a simple search for the word "flag".

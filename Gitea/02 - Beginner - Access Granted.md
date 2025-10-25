@@ -8,7 +8,7 @@ Access Granted
 
 ## Difficulty
 
-Easy
+Beginner
 
 ## Overview
 
@@ -45,5 +45,5 @@ settings.
 
 This challenge reinforces basic enumeration habits and encourages participants
 to explore legitimate UI features rather than jump immediately to exploitation.
-Difficulty is "Easy" since no advanced tooling or privilege escalation is
+Difficulty is "Beginner" since no advanced tooling or privilege escalation is
 required.

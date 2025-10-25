@@ -8,7 +8,7 @@ Intern Secrets
 
 ## Difficulty
 
-Easy
+Beginner
 
 ## Overview
 
@@ -57,6 +57,6 @@ No external network requests are required to solve this challenge; decoding
 locally is sufficient.
 
 This challenge introduces participants to repository inspection, credential
-discovery, and basic encoding recognition. Difficulty is rated "Easy" because
-the solution path is direct and relies on fundamental analysis skills rather
-than advanced exploitation.
+discovery, and basic encoding recognition. Difficulty is rated "Beginner"
+because the solution path is direct and relies on fundamental analysis skills
+rather than advanced exploitation.

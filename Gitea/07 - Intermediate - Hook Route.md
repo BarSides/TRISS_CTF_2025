@@ -8,7 +8,7 @@ Hook Route
 
 ## Difficulty
 
-Medium
+Intermediate
 
 ## Overview
 
