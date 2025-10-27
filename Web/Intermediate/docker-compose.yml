@@ -1,0 +1,9 @@
+services:
+  elitevault_app:
+    build: .
+    container_name: triss_elitevault_app
+    environment:
+          - FLASK_SECRET_KEY="1e0f2e0a296818f1a14b513a59d39764f7c46f1f53531c34a6117c43b2"
+    ports:
+      - "8085:5000"
+    restart: always

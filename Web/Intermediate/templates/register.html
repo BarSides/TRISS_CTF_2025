@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Password Registration</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="password-wrapper">
+        <div class="password-box">
+            <div class="password-label">
+                Creating a new account for <span id="usernameDisplay">{{ username }}</span>
+                <p>Please enter a password that meets our high security standards.</p>
+            </div>
+            <input type="hidden" id="usernameInput" value="{{ username }}">
+            <div class="password-and-button">
+                <input type="text" id="passwordInput" class="password-input" placeholder="password">
+                <div class="password-length" id="passwordLength"></div>
+                <button id="submitBtn" disabled>Register</button>
+            </div>
+        </div>
+        <p id="message"></p>
+        <ul id="ruleList" class="rule-list"></ul>
+    </div>
+
+    <script src="{{ url_for('static', filename='rules.js') }}"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
