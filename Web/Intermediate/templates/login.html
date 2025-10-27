@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log In to EliteVault</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="login-body">
+    <div class="login-container">
+        {% if username and useractive %}
+            <h1>Welcome back, {{ username }}!</h1>
+            <p id="message"></p>
+        {% elif newuser %}
+            <h1>Please select a username</h1>
+            <p id="message"></p>
+        {% else %}
+            <h1>Welcome!</h1>
+            <p id="message"></p>
+        {% endif %}
+        <form id="loginForm">
+            <div class="form-group">
+                <input type="text" id="username" name="username" class="password-input" placeholder="username" required>
+            </div>
+            <button type="submit" class="btn">Submit</button>
+        </form>
+    </div>
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const messageEl = document.getElementById('message');
+            
+            const response = await fetch('/login_attempt_post', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username })
+            });
+            const result = await response.json();
+            messageEl.textContent = result.message;
+            
+            // Redirect to registration with the entered username
+            if (result.redirect_url) {
+                window.location.href = result.redirect_url;
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,176 @@
+@font-face {
+    font-family: Roboto, Arial, sans-serif;
+    font-weight: 500;
+}
+
+:root {
+    --bg-color: #ccd6e1;
+    --text-color: #2c3e50;
+    --text-light: #888;
+    --card-bg: #ffffff;
+    --border-color: #e0e6ed;
+    --primary-color: #3498db;
+    --success-color: #2ecc71;
+    --error-color: #e74c3c;
+    --font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+}
+
+body {
+    background-color: var(--bg-color);
+    font-family: var(--font-family);
+    color: var(--text-color);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.password-wrapper {
+    max-width: 60%;
+    width: 100%;
+    margin: 0 auto;
+    background: var(--card-bg);
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    padding: 30px;
+    box-sizing: border-box;
+}
+
+.password-label {
+    font-size: 16px;
+    margin-bottom: 8px;
+    text-align: left;
+}
+
+.password-and-button {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.password-input {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-family: monospace;
+    font-size: 28px;
+    min-height: 64px;
+    outline: 0;
+    padding: 15px;
+    width: 100%;
+    transition: border-color .15s ease-in-out;
+    box-sizing: border-box;
+    flex-grow: 1;
+}
+
+.password-input:focus {
+    border-color: var(--primary-color);
+}
+
+.password-length:empty {
+    background-color: var(--card-bg);
+}
+
+.password-length {
+    color: var(--text-light);
+    font-weight: bold;
+    font-size: 1.5em;
+    padding: 12px;
+    border-radius: 8px;
+    background-color: #ecf0f1;
+    min-width: 40px;
+    text-align: center;
+}
+
+#usernameDisplay {
+    font-weight: bold;
+}
+
+.btn {
+    display: inline-block;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1em;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.3s, color 0.3s;
+    background-color: var(--primary-color);
+    color: var(--card-bg);
+    margin-top: 1em;
+}
+
+button {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    background-color: #e0e0e0;
+    color: var(--text-light);
+}
+
+button:enabled {
+    background-color: var(--primary-color);
+    color: var(--card-bg);
+}
+
+/* Rule List & Messages */
+.rule-list {
+    list-style: none;
+    padding: 0;
+    margin-top: 20px;
+    width: 100%; 
+}
+
+.rule {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 10px;
+    transition: all 0.5s ease-in-out;
+    display: flex;
+    align-items: center;
+    position: relative;
+    opacity: 0;
+    transform: translateY(10px);
+}
+
+.rule.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.rule.valid {
+    background-color: #e8f7ec;
+    border-color: var(--success-color);
+    color: var(--success-color);
+}
+
+.rule.invalid {
+    background-color: #fbecec;
+    border-color: var(--error-color);
+    color: var(--error-color);
+}
+
+.rule-text {
+    flex-grow: 1;
+    margin-left: 10px;
+}
+
+.rule .icon {
+    font-size: 1.2em;
+}
+
+#message {
+    text-align: center;
+    margin-top: 15px;
+    font-style: italic;
+    color: #7f8c8d;
+}

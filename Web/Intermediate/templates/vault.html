@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EliteVault</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="success-body">
+    <div class="success-container">
+        <h1>Congratulations, {{ username }}!</h1>
+        <p>Your password has been validated as secure.<br/>Confirmation code:</p>
+        <div class="flag-box">
+            <h3><pre>{{ flag }}</pre></h3>
+        </div>
+    </div>
+</body>
+</html>
