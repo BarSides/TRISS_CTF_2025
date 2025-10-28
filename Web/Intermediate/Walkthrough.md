@@ -36,7 +36,7 @@ and the response contains
 ```
 
 If we look at some of the files loaded, we see rules.js which contains the list of rules that must be satisfied
-```json
+```javascript
 const rules = [
     { "id": "c4ca4238a0b923820dcc509a6f75849b", "text": "Rule 1: Password must be at least 8 characters long.", "check": p => p.length >= 8 },
     { "id": "c81e728d9d4c2f636f067f89cc14862c", "text": "Rule 2: Must contain an uppercase letter.", "check": p => /[A-Z]/.test(p) },
