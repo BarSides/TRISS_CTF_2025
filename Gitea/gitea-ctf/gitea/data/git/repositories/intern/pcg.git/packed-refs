@@ -1,0 +1,5 @@
+# pack-refs with: peeled fully-peeled sorted 
+1a0eaf6378a602483912c72a83447a2ebbf2bf9b refs/heads/Fractals-Tutorial
+bc0481199fea7fa19db1238d3b933e2ffcce256d refs/heads/Noise-Tutorial
+e7d26269a93e0669f01e9f790513d3efa890fb06 refs/heads/master
+e7d26269a93e0669f01e9f790513d3efa890fb06 refs/tags/v1.0.0

@@ -1,0 +1,23 @@
+networks:
+  giteactf:
+
+services:
+  gitea:
+    environment:
+      - USER_UID=1000
+      - USER_GID=1000
+    hostname: gitea
+    image: gitea/gitea:1.23-rootless
+    networks:
+      - giteactf
+    ports:
+      - "5678:5678"
+      - "3000:3000"
+    restart: unless-stopped
+    user: "1000:1000"
+    volumes:
+      - ./gitea/config:/etc/gitea:ro
+      - ./gitea/data/git:/var/lib/gitea/git
+      - ./gitea/data/data:/var/lib/gitea/data
+      - ./gitea/data/actions_log:/var/lib/gitea/actions_log
+      - /etc/localtime:/etc/localtime:ro
