@@ -1,18 +1,16 @@
 # Name
-Vat of Acid 2
+Vat of Acid 3
 
 ## Author
 @witchofthewires
 
 ## Overview
-Oops! It turns out that TRISS doesn't want to restore the boiling vat of acid to the manufacturer-recommended 437 degrees Fahrenheit. TRISS has been in the boiling acid game for a *long* time, and they've got a secret temperature guaranteed to maximize the rate of reaction and create a perfect product every time, just like Grandma used to make. The secret temperature is so secret, in fact, that no one at TRISS knows what it is! Grandma TRISS comes and sets it before the conference every year, and physical access records show that this year she did so just before the PLC was hacked. 
+Dani says she updated the temperature controller to set a coil indicator when the acid is overheated. However, the HMI must also be updated to display this value, and Dani refuses to do so herself, saying that she and the software 'are enemies now'. The compiled PLC program and HMI view are attached; what data address can the indicator coil be read at? 
 
-We can't admit to Grandma TRISS that we were hacked, or that the secret temperature wasn't stored in an enterprise secrets vault for use in our incident response/disaster recovery plans - she'll be so disappointed in us!! Can you recover Grandma's secret boiling acid temperature from the PCAP?
-
-The flag has format "BarSides{TEMPERATURE_IN_FAHRENHEIT}". For instance, if the temperature is 500 degrees F, the flag is simply "BarSides{500}".
+The flag has format 'BarSides{DATA_ADDRESS}'. For instance, if the coil indicator has Modbus address %QW1, the flag is 'BarSides{400002}'.
 
 ## Setup
-This challenge uses the PCAP previously provided for Forensics Beginner.
+Ensure that the files 'plc.st' and 'hmi.json' are attached.
 
 ## Flag
-BarSides{491}
+BarSides{100241}
