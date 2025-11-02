@@ -11,7 +11,9 @@ Sometimes differences are as obvious as black and white -- other times they're j
 
 # Walkthrough
 
-When viewing the two images, there is no obvious visible difference. The mod.png file is larger than orig.png by about 5 Kb, so we're going to check for hidden data:
+When viewing the two images, there is no obvious visible difference.\
+![orig](orig.png) ![mod](mod.png)\
+The mod.png file is larger than orig.png by about 5 Kb, so we're going to check for hidden data:
 ```bash
 binwalk mod.png   
 
@@ -28,7 +30,33 @@ That seems promising, but we'll need a password. We can extract the zip archive 
 ```bash
 binwalk -e mod.png
 ```
-Checking strings on on mod.png, we get a lot of data, including a suspicious string:
+Checking strings on on mod.png, we get a lot of data
+```
+strings mod.png 
+IHDR
+9tEXtNote
+VGhpcyBpc24ndCB0aGUgYmFzZSB5b3UncmUgbG9va2luZyBmb3I=
+'tEXtSoftware
+Badobe Photostop GG 2024 (OS2),
+'tEXtAuthor
+BarSides AI Image Generator 8.5a
+!tEXtCreation Time
+2025:10:22 15:30:45
+tEXtModify Date
+2025:10:22 16:40:12
+tEXtDescription
+Meetup Logo
+tEXtSource
+Nik0n D850
+LtEXtKeywords
+cyber, meetup, bar, Pittsburgh, CTF, flag, lockpicking, speed chess
+?tEXtXMP-photoshop:Instructions
+Do not crop. Maintain color profile.
+tEXtXMP-photoshop:ColorMode
+tEXtGPSLatitudeRef
+...
+```
+including a suspicious string:
 ```VGhpcyBpc24ndCB0aGUgYmFzZSB5b3UncmUgbG9va2luZyBmb3I=```\
 However...
 ```
